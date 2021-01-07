@@ -129,6 +129,26 @@ class Tag extends Model
         });
     }
 
+
+    /**
+     * Get suggested tags
+     * @param Builder $query
+     * @param $groupName
+     * @return Builder
+     */
+    public function scopeNotInGroups(Builder $query, $groupNamesArray)
+    {
+        foreach ($groupNamesArray as $groupName)
+        {
+            $groupSlugsArray[] = TaggingUtility::normalize($groupName);
+        }
+
+        return $query->whereHas('group', function (Builder $query) use ($groupSlugsArray) {
+            $query->whereNotIn('slug',$groupSlugsArray);
+        })->orWhereNull('tag_group_id');
+    }
+
+
     /**
      * Set the name of the tag : $tag->name = 'myname';
      *
