@@ -311,7 +311,7 @@ trait Taggable
             ->distinct()
             ->join('tagging_tags', 'tag_slug', '=', 'tagging_tags.slug')
             ->where('taggable_type', '=', (new static)->getMorphClass())
-            ->orderBy('tag_slug', 'ASC')
+            ->orderBy('count', 'DESC')
             ->get(['tag_slug as slug', 'tag_name as name', 'tagging_tags.count as count']);
     }
 
